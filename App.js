@@ -6,6 +6,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { MaterialIcons } from '@expo/vector-icons';
 import Button from './src/components/Button';
 import Timer from './src/components/Timer';
+import Slider from '@react-native-community/slider';
 
 export default function App() {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
