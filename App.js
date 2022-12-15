@@ -15,8 +15,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { MaterialIcons } from '@expo/vector-icons';
 import Button from './src/components/Button';
 import Timer from './src/components/Timer';
-
-const windowWidth = Dimensions.get('window').width;
+import { Video } from 'expo-av';
 
 export default function App() {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -31,6 +30,7 @@ export default function App() {
   const [zoom, setZoom] = useState(0);
   const cameraRef = useRef(null);
   const [record, setRecord] = useState(null);
+  const [ratioFromIp, setRatioFromIp] = useState();
 
   useEffect(() => {
     if (!timerOn) {
@@ -88,6 +88,21 @@ export default function App() {
     setZoom(0.06);
   };
 
+  const aspectRatio11 = () => {
+    setRatioFromIp('1:1');
+    return ratioFromIp;
+  };
+
+  const aspectRatio169 = () => {
+    setRatioFromIp('16:9');
+    return ratioFromIp;
+  };
+
+  const aspectRatio43 = () => {
+    setRatioFromIp('4:3');
+    return ratioFromIp;
+  };
+
   const takeVideo = async () => {
     if (cameraRef) {
       try {
@@ -101,7 +116,7 @@ export default function App() {
   };
 
   const stopVideo = async () => {
-    cameraRef.stopRecording();
+    await cameraRef.current.stopRecording();
   };
 
   const takePicture = async () => {
@@ -151,6 +166,7 @@ export default function App() {
             ref={cameraRef}
             flashMode={flash}
             zoom={zoom}
+            ratio={ratioFromIp}
           >
             <View style={styles.timerContainer}>
               <View style={styles.buttonContainer}>
@@ -255,9 +271,20 @@ export default function App() {
                 paddingHorizontal: 30,
               }}
             >
+              <Button title="1:1" onPress={aspectRatio11} icon="" />
+              <Button title="16:9" onPress={aspectRatio169} icon="" />
+              <Button title="4:3" onPress={aspectRatio43} icon="" />
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 30,
+              }}
+            >
               <Button title="" onPress={takePicture} icon="camera" />
-              <Button title="" onPress={takeVideo} icon="camera" />
-              <Button title="" onPress={stopVideo} icon="camera" />
+              <Button title="" onPress={takeVideo} icon="video-camera" />
+              <Button title="" onPress={stopVideo} icon="plus" />
             </View>
           </>
         )}
